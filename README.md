@@ -1,0 +1,1 @@
+# BrightLaunch Starter\n\nNext.js + Tailwind starter for BrightLaunch.\n\nRun locally with:\n```bash\nnpm install\nnpm run dev\n```
