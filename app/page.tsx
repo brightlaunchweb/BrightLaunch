@@ -195,7 +195,7 @@ export default function Page() {
                   <li>• Nonprofits: ask about discounted rates</li>
                 </ul>
               </div>
-              <form className="space-y-4" action="mailto:hello@yourdomain.com" method="post">
+              <form className="space-y-4" action="mailto:hello@brightlaunchweb.com" method="post">
                 <input className="input" name="name" placeholder="Your name" required />
                 <input className="input" name="email" type="email" placeholder="Email" required />
                 <input className="input" name="company" placeholder="Business / nonprofit" />
