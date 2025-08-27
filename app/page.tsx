@@ -1,4 +1,33 @@
+"use client";
+import { useState } from "react";
+
 export default function Page() {
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [error, setError] = useState<string>("");
+
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const form = e.currentTarget as HTMLFormElement;
+    const formData = new FormData(form);
+    const payload = Object.fromEntries(formData.entries());
+
+    try {
+      setStatus("sending");
+      setError("");
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error((await res.json()).error || "Failed to send");
+      setStatus("sent");
+      form.reset();
+    } catch (err: any) {
+      setStatus("error");
+      setError(err?.message || "Something went wrong");
+    }
+  }
+
   return (
     <main>
       {/* Hero */}
@@ -20,7 +49,7 @@ export default function Page() {
               <p className="mt-4 text-sm text-white/60">No pushy sales. Real deliverables in days, not weeks.</p>
             </div>
 
-            {/* Right: mockup */}
+            {/* Right: mockup now looks like a real site */}
             <div className="relative">
               <div className="card glow-line">
                 <div className="card-inner">
@@ -31,13 +60,43 @@ export default function Page() {
                           <stop offset="0%" stopColor="#fb923c"/>
                           <stop offset="100%" stopColor="#3b82f6"/>
                         </linearGradient>
+                        <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+                          <feGaussianBlur stdDeviation="6" />
+                        </filter>
                       </defs>
-                      <rect x="20" y="20" width="560" height="80" rx="12" fill="url(#g)" opacity="0.8"/>
-                      <rect x="20" y="120" width="360" height="30" rx="8" fill="#1f2937"/>
-                      <rect x="20" y="160" width="280" height="30" rx="8" fill="#1f2937" opacity="0.8"/>
-                      <rect x="20" y="220" width="170" height="110" rx="12" fill="#0f172a"/>
-                      <rect x="205" y="220" width="170" height="110" rx="12" fill="#0f172a"/>
-                      <rect x="390" y="220" width="170" height="110" rx="12" fill="#0f172a"/>
+                      {/* Window frame */}
+                      <rect x="10" y="10" width="580" height="355" rx="18" fill="#0b1220" opacity="0.9"/>
+                      {/* Top bar */}
+                      <rect x="28" y="28" width="544" height="18" rx="9" fill="#0e172a"/>
+                      {/* Logo */}
+                      <rect x="40" y="26" width="90" height="22" rx="6" fill="url(#g)"/>
+                      {/* Nav links */}
+                      <rect x="150" y="28" width="60" height="14" rx="7" fill="#1e293b"/>
+                      <rect x="215" y="28" width="60" height="14" rx="7" fill="#1e293b" opacity="0.8"/>
+                      <rect x="280" y="28" width="60" height="14" rx="7" fill="#1e293b" opacity="0.6"/>
+                      {/* CTA */}
+                      <rect x="488" y="25" width="84" height="24" rx="8" fill="url(#g)" opacity="0.95"/>
+
+                      {/* Hero image */}
+                      <rect x="28" y="60" width="270" height="150" rx="14" fill="#111827"/>
+                      <circle cx="163" cy="135" r="82" fill="url(#g)" opacity="0.28" filter="url(#soft)"/>
+
+                      {/* Hero copy */}
+                      <rect x="316" y="74" width="236" height="24" rx="8" fill="#1f2937"/>
+                      <rect x="316" y="106" width="200" height="18" rx="8" fill="#1f2937" opacity="0.85"/>
+                      <rect x="316" y="130" width="160" height="18" rx="8" fill="#1f2937" opacity="0.7"/>
+                      {/* Hero buttons */}
+                      <rect x="316" y="160" width="120" height="26" rx="10" fill="url(#g)"/>
+                      <rect x="444" y="160" width="108" height="26" rx="10" fill="#0b2948"/>
+
+                      {/* Feature cards */}
+                      <rect x="28" y="228" width="165" height="110" rx="12" fill="#0f172a"/>
+                      <rect x="213" y="228" width="165" height="110" rx="12" fill="#0f172a"/>
+                      <rect x="398" y="228" width="165" height="110" rx="12" fill="#0f172a"/>
+                      {/* Captions */}
+                      <rect x="44" y="300" width="130" height="10" rx="5" fill="#1e293b"/>
+                      <rect x="229" y="300" width="130" height="10" rx="5" fill="#1e293b"/>
+                      <rect x="414" y="300" width="130" height="10" rx="5" fill="#1e293b"/>
                     </svg>
                   </div>
                 </div>
@@ -102,9 +161,9 @@ export default function Page() {
         <p className="section-sub">Transparent packages designed for small teams and nonprofits.</p>
         <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
-            { name: 'Starter', price: '$799', bullets: ['One-page site', 'Copy & images included', '1 round of edits', 'Launch in ~7 days'] },
-            { name: 'Business', price: '$1,999', bullets: ['Up to 6 pages', 'Brand polish & icons', 'Blog setup', 'Launch in ~2–3 weeks'] },
-            { name: 'Care Plan', price: '$79/mo', bullets: ['Hosting & SSL', 'Edits & updates', 'Backups & monitoring', 'Priority support'] }
+            { name: 'Starter', price: '$499', bullets: ['One-page site', 'Copy & images included', '1 round of edits', 'Launch in ~7 days'] },
+            { name: 'Business', price: '$1,699', bullets: ['Up to 6 pages', 'Brand polish & icons', 'Blog setup', 'Launch in ~2–3 weeks'] },
+            { name: 'Care Plan', price: '$49/mo', bullets: ['Hosting & SSL', 'Edits & updates', 'Backups & monitoring', 'Priority support'] }
           ].map((tier) => (
             <div key={tier.name} className="card">
               <div className="card-inner">
@@ -195,12 +254,16 @@ export default function Page() {
                   <li>• Nonprofits: ask about discounted rates</li>
                 </ul>
               </div>
-              <form className="space-y-4" action="mailto:hello@brightlaunchweb.com" method="post">
+              <form className="space-y-4" onSubmit={onSubmit}>
                 <input className="input" name="name" placeholder="Your name" required />
                 <input className="input" name="email" type="email" placeholder="Email" required />
                 <input className="input" name="company" placeholder="Business / nonprofit" />
-                <textarea className="textarea" name="message" placeholder="What do you need? (e.g., 3-page site, online booking, donate page)" />
-                <button className="btn-primary" type="submit">Send</button>
+                <textarea className="textarea" name="message" placeholder="What do you need? (e.g., 3-page site, online booking, donate page)" required />
+                <button className="btn-primary" type="submit" disabled={status==='sending'}>
+                  {status==='sending' ? 'Sending…' : 'Send'}
+                </button>
+                {status==='sent' && <p className="text-green-400 text-sm">Thanks! Your message is on the way.</p>}
+                {status==='error' && <p className="text-red-400 text-sm">{error || 'We could not send your message.'}</p>}
               </form>
             </div>
           </div>
@@ -219,5 +282,39 @@ export default function Page() {
         </div>
       </footer>
     </main>
-  )
+  );
+}
+
+// /app/api/contact/route.ts
+import { Resend } from "resend";
+
+export async function POST(req: Request) {
+  try {
+    const { name, email, company, message } = await req.json();
+    if (!name || !email || !message) {
+      return new Response(JSON.stringify({ ok: false, error: "Missing required fields" }), { status: 400 });
+    }
+
+    const resend = new Resend(process.env.RESEND_API_KEY);
+    const to = process.env.MAIL_TO || "hello@brightlaunchweb.com";
+    const from = process.env.MAIL_FROM || "BrightLaunch <onboarding@resend.dev>"; // Replace when you verify your domain
+
+    await resend.emails.send({
+      from,
+      to,
+      subject: `New inquiry from ${name}${company ? ` at ${company}` : ""}`,
+      replyTo: email,
+      text: `Name: ${name}
+Email: ${email}
+Company: ${company || "-"}
+
+Message:
+${message}`,
+    });
+
+    return Response.json({ ok: true });
+  } catch (err) {
+    console.error(err);
+    return new Response(JSON.stringify({ ok: false, error: "Server error" }), { status: 500 });
+  }
 }
