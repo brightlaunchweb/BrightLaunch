@@ -14,13 +14,13 @@ export async function POST(req: Request) {
 
     const resend = new Resend(process.env.RESEND_API_KEY);
     const to = process.env.MAIL_TO || "you@example.com";
-    const from = process.env.MAIL_FROM || "BrightLaunch <onboarding@resend.dev>"; // swap when your domain is verified
+    const from = process.env.MAIL_FROM || "BrightLaunch <onboarding@resend.dev>"; // Updated to your subdomain when verified
 
     await resend.emails.send({
       from,
       to,
       subject: `New inquiry from ${name}${company ? ` at ${company}` : ""}`,
-      replyTo: email, // ✅ correct key for Resend SDK
+      replyTo: email,
       text: `Name: ${name}
 Email: ${email}
 Company: ${company || "-"}
