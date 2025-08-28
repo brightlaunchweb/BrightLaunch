@@ -1,4 +1,4 @@
-// Tailwind v4 uses the new PostCSS plugin package
+// postcss.config.js — Tailwind v4
 module.exports = {
   plugins: {
     '@tailwindcss/postcss': {},

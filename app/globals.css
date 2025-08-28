@@ -1,4 +1,4 @@
-/* Tailwind v4 entry — single import */
+/* app/globals.css — Tailwind v4 entry */
 @import "tailwindcss";
 
 /* Base theme */
@@ -55,9 +55,7 @@ body {
 
 /* Hero grid + anchor offset for sticky header */
 .hero-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; align-items: center; }
-@media (min-width: 768px) {
-  .hero-grid { grid-template-columns: 1.2fr 1fr; }
-}
+@media (min-width: 768px) { .hero-grid { grid-template-columns: 1.2fr 1fr; } }
 [id] { scroll-margin-top: 96px; }
 
 /* Footer underline hover */
