@@ -35,12 +35,12 @@ export default function Page() {
         <div className="container-page pt-20 sm:pt-24 md:pt-28 pb-16 sm:pb-20">
           <div className="grid hero-grid gap-10 items-center">
             <div>
-              <span className="badge">AI-accelerated web design</span>
+              <span className="badge">Modern web design</span>
               <h1 className="mt-4 text-4xl sm:text-5xl md:text-6xl font-black leading-[1.05]">
                 Launch a site that <span className="gradient-text">wins customers</span>
               </h1>
               <p className="section-sub">
-                BrightLaunch builds sleek, fast, mobile-first websites for small businesses and nonprofits. We use AI to move quickly — you keep the quality, lose the wait.
+                BrightLaunch builds sleek, fast, mobile-first websites for small businesses and nonprofits. We move quickly with proven workflows — you keep the quality, lose the wait.
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-4">
                 <a href="#contact" className="btn-primary">Get a free homepage mockup</a>
@@ -49,7 +49,7 @@ export default function Page() {
               <p className="mt-4 text-sm text-white/60">No pushy sales. Real deliverables in days, not weeks.</p>
             </div>
 
-            {/* Right: mockup looks like a real site */}
+            {/* Right: mockup now looks like a real site */}
             <div className="relative">
               <div className="card glow-line">
                 <div className="card-inner">
@@ -64,23 +64,36 @@ export default function Page() {
                           <feGaussianBlur stdDeviation="6" />
                         </filter>
                       </defs>
+                      {/* Window frame */}
                       <rect x="10" y="10" width="580" height="355" rx="18" fill="#0b1220" opacity="0.9"/>
+                      {/* Top bar */}
                       <rect x="28" y="28" width="544" height="18" rx="9" fill="#0e172a"/>
+                      {/* Logo */}
                       <rect x="40" y="26" width="90" height="22" rx="6" fill="url(#g)"/>
+                      {/* Nav links */}
                       <rect x="150" y="28" width="60" height="14" rx="7" fill="#1e293b"/>
                       <rect x="215" y="28" width="60" height="14" rx="7" fill="#1e293b" opacity="0.8"/>
                       <rect x="280" y="28" width="60" height="14" rx="7" fill="#1e293b" opacity="0.6"/>
+                      {/* CTA */}
                       <rect x="488" y="25" width="84" height="24" rx="8" fill="url(#g)" opacity="0.95"/>
+
+                      {/* Hero image */}
                       <rect x="28" y="60" width="270" height="150" rx="14" fill="#111827"/>
                       <circle cx="163" cy="135" r="82" fill="url(#g)" opacity="0.28" filter="url(#soft)"/>
+
+                      {/* Hero copy */}
                       <rect x="316" y="74" width="236" height="24" rx="8" fill="#1f2937"/>
                       <rect x="316" y="106" width="200" height="18" rx="8" fill="#1f2937" opacity="0.85"/>
                       <rect x="316" y="130" width="160" height="18" rx="8" fill="#1f2937" opacity="0.7"/>
+                      {/* Hero buttons */}
                       <rect x="316" y="160" width="120" height="26" rx="10" fill="url(#g)"/>
                       <rect x="444" y="160" width="108" height="26" rx="10" fill="#0b2948"/>
+
+                      {/* Feature cards */}
                       <rect x="28" y="228" width="165" height="110" rx="12" fill="#0f172a"/>
                       <rect x="213" y="228" width="165" height="110" rx="12" fill="#0f172a"/>
                       <rect x="398" y="228" width="165" height="110" rx="12" fill="#0f172a"/>
+                      {/* Captions */}
                       <rect x="44" y="300" width="130" height="10" rx="5" fill="#1e293b"/>
                       <rect x="229" y="300" width="130" height="10" rx="5" fill="#1e293b"/>
                       <rect x="414" y="300" width="130" height="10" rx="5" fill="#1e293b"/>
@@ -148,9 +161,9 @@ export default function Page() {
         <p className="section-sub">Transparent packages designed for small teams and nonprofits.</p>
         <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
-            { name: 'Starter', price: '$499', bullets: ['One-page site', 'Copy & images included', '1 round of edits', 'Launch in ~7 days'] },
-            { name: 'Business', price: '$1,699', bullets: ['Up to 6 pages', 'Brand polish & icons', 'Blog setup', 'Launch in ~2–3 weeks'] },
-            { name: 'Care Plan', price: '$49/mo', bullets: ['Hosting & SSL', 'Edits & updates', 'Backups & monitoring', 'Priority support'] }
+            { name: 'Starter', price: '$799', bullets: ['One-page site', 'Copy & images included', '1 round of edits', 'Launch in ~7 days'] },
+            { name: 'Business', price: '$1,999', bullets: ['Up to 6 pages', 'Brand polish & icons', 'Blog setup', 'Launch in ~2–3 weeks'] },
+            { name: 'Care Plan', price: '$79/mo', bullets: ['Hosting & SSL', 'Edits & updates', 'Backups & monitoring', 'Priority support'] }
           ].map((tier) => (
             <div key={tier.name} className="card">
               <div className="card-inner">
@@ -169,11 +182,11 @@ export default function Page() {
       {/* Process */}
       <section id="process" className="container-page py-16 sm:py-20">
         <h2 className="section-title">How it works</h2>
-        <p className="section-sub">A streamlined, AI-assisted process keeps quality high and timelines short.</p>
+        <p className="section-sub">A streamlined process keeps quality high and timelines short.</p>
         <ol className="mt-10 grid grid-auto-fit gap-6">
           {[
             ['Discovery call', 'We learn your goals, audience, and style preferences.'],
-            ['Content sprint', 'We draft copy and gather visuals with AI assistance.'],
+            ['Content sprint', 'We draft copy and gather visuals efficiently.'],
             ['Design & build', 'You review an interactive mockup; we iterate fast.'],
             ['Launch & care', 'Deploy, connect domain, and set up analytics & SEO.']
           ].map(([title, desc], idx) => (
@@ -235,9 +248,9 @@ export default function Page() {
             <div className="grid gap-8 md:grid-cols-2 items-start">
               <div>
                 <h2 className="section-title">Tell us about your project</h2>
-                <p className="section-sub">We’ll reply with a free mini-brief and a suggested package.</p>
+                <p className="section-sub">We’ll reply with a free mini‑brief and a suggested package.</p>
                 <ul className="mt-6 space-y-2 text-white/80">
-                  <li>• 15-minute intro call available</li>
+                  <li>• 15‑minute intro call available</li>
                   <li>• Nonprofits: ask about discounted rates</li>
                 </ul>
               </div>
