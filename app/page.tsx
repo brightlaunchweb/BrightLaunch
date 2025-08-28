@@ -252,6 +252,14 @@ export default function Page() {
                 {status==='sent' && <p className="text-green-400 text-sm">Thanks! Your message is on the way.</p>}
                 {status==='error' && <p className="text-red-400 text-sm">{error || 'We could not send your message.'}</p>}
               </form>
+              <form className="space-y-4" onSubmit={onSubmit}>
+                {/* …your existing inputs… */}
+                <input type="text" name="website" className="hidden" tabIndex={-1} autoComplete="off" />
+                <button className="btn-primary" type="submit" disabled={status==='sending'}>
+               {status==='sending' ? 'Sending…' : 'Send'}
+              </button>
+              {/* status messages */}
+              </form>
             </div>
           </div>
         </div>
