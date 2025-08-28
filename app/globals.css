@@ -5,7 +5,7 @@
 /* Base theme */
 :root {
   --brand-start: 26 95% 55%; /* orange */
-  --brand-end: 221 83% 53%; /* blue */
+  --brand-end: 221 83% 53%;  /* blue  */
 }
 
 html, body, #__next { height: 100%; }
@@ -51,12 +51,15 @@ body {
 }
 @keyframes scan { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
 
-/* Responsive grids */
 .grid-auto-fit { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
-.hero-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
+
+/* NEW: hero grid + tighter top spacing controls */
+.hero-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; align-items: center; }
 @media (min-width: 768px) {
-  .hero-grid { grid-template-columns: 1.2fr 1fr; align-items: center; }
+  .hero-grid { grid-template-columns: 1.2fr 1fr; }
 }
+/* allow anchor links to avoid sticky header overlap */
+[id] { scroll-margin-top: 96px; }
 
 /* Footer underline hover */
 .footer-link { @apply relative; }
@@ -82,6 +85,5 @@ body {
 .pricing-table td { @apply py-3 px-4 border-b border-white/10; }
 .pricing-table tr:last-child td { @apply border-b-0; }
 
-/* Section spacing + anchor offset so sticky nav doesn’t cover headings */
+/* Section spacing (kept generous for sections; hero uses its own tighter padding) */
 section { @apply py-20 sm:py-24; }
-[id] { scroll-margin-top: 96px; } /* sticky header height + spacing */
