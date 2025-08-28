@@ -14,16 +14,8 @@ function gaEvent(action: string, params?: Record<string, any>) {
 /** Animated shimmer block used in mockups */
 function Shimmer({ className = "" }: { className?: string }) {
   return (
-    <div
-      className={[
-        "relative overflow-hidden rounded-md bg-white/5 border border-white/10",
-        className,
-      ].join(" ")}
-    >
-      <div
-        className="absolute inset-0 -translate-x-full animate-[shimmer_2.5s_infinite] bg-gradient-to-r from-transparent via-white/10 to-transparent"
-        aria-hidden
-      />
+    <div className={["relative overflow-hidden rounded-md bg-white/5 border border-white/10", className].join(" ")}>
+      <div className="absolute inset-0 -translate-x-full animate-[shimmer_2.5s_infinite] bg-gradient-to-r from-transparent via-white/10 to-transparent" aria-hidden />
       <style>{`@keyframes shimmer { 100% { transform: translateX(100%); } }`}</style>
     </div>
   );
@@ -42,7 +34,6 @@ function HeroShowcase() {
             <span className="inline-block h-2.5 w-2.5 rounded-full bg-green-400/80" />
             <div className="ml-3 text-xs text-white/50">brightlaunch preview</div>
           </div>
-
           {/* Browser content */}
           <div className="grid gap-3">
             <Shimmer className="h-8" />
@@ -58,7 +49,6 @@ function HeroShowcase() {
           </div>
         </div>
       </div>
-
       {/* Phone overlay */}
       <div className="absolute -bottom-6 -right-4 w-40 sm:w-48 md:w-56 lg:w-64">
         <div className="rounded-[2rem] border border-white/10 bg-gradient-to-b from-slate-900 to-slate-800 p-3 shadow-2xl">
@@ -101,7 +91,6 @@ export default function Page() {
     const form = e.currentTarget as HTMLFormElement;
     const formData = new FormData(form);
     const payload = Object.fromEntries(formData.entries());
-
     try {
       setStatus("sending");
       setError("");
@@ -150,10 +139,7 @@ export default function Page() {
             <a href="#pricing" className="nav-link">Pricing</a>
             <a href="#faq" className="nav-link">FAQ</a>
           </nav>
-          <button
-            onClick={() => { gaEvent("cta_click", { label: "book_call_header" }); jumpToContact(); }}
-            className="btn-primary hidden sm:inline-flex"
-          >
+          <button onClick={() => { gaEvent("cta_click", { label: "book_call_header" }); jumpToContact(); }} className="btn-primary hidden sm:inline-flex">
             Book a Call
           </button>
         </div>
@@ -170,8 +156,7 @@ export default function Page() {
                 <span className="gradient-text">Modern websites</span> that grow customers & supporters
               </h1>
               <p className="section-sub">
-                Sleek, fast, mobile-first sites built for small businesses and nonprofits.
-                Clear messaging, clean design, and performance that helps people convert.
+                Sleek, fast, mobile-first sites built for small businesses and nonprofits. Clear messaging, clean design, and performance that helps people convert.
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-4">
                 <button onClick={() => { gaEvent("cta_click", { label: "hero_free_mockup" }); jumpToContact(); }} className="btn-primary">
@@ -190,7 +175,6 @@ export default function Page() {
                 <li>• Nonprofits & clubs</li>
               </ul>
             </div>
-
             {/* Right visual */}
             <HeroShowcase />
           </div>
@@ -326,7 +310,6 @@ export default function Page() {
                 <p className="section-sub">We’ll reply within 1 business day with a mini-brief and suggested package.</p>
                 {selectedPlan && <p className="mt-4 text-sm text-white/70">Selected plan: <span className="font-semibold">{selectedPlan}</span></p>}
               </div>
-
               <form className="space-y-4" onSubmit={onSubmit} aria-label="Contact form">
                 <label className="sr-only" htmlFor="name">Your name</label>
                 <input className="input" id="name" name="name" placeholder="Your name" required />
@@ -336,16 +319,9 @@ export default function Page() {
                 <input className="input" id="company" name="company" placeholder="Business / nonprofit" />
                 <label className="sr-only" htmlFor="message">Message</label>
                 <textarea className="textarea" id="message" name="message" placeholder="What do you need? (e.g., 3-page site, booking, donate page)" required />
-
                 <input type="hidden" name="plan" value={selectedPlan ?? ""} />
                 <input type="text" name="website" className="hidden" tabIndex={-1} autoComplete="off" />
-
-                <button
-                  className="btn-primary"
-                  type="submit"
-                  disabled={status === "sending"}
-                  onClick={() => gaEvent("cta_click", { label: "contact_send" })}
-                >
+                <button className="btn-primary" type="submit" disabled={status === "sending"} onClick={() => gaEvent("cta_click", { label: "contact_send" })}>
                   {status === "sending" ? "Sending…" : "Send Message"}
                 </button>
                 {status === "sent" && <p className="text-green-400 text-sm">Thanks! Your message is on the way.</p>}
