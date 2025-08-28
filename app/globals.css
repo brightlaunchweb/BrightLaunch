@@ -9,6 +9,7 @@
 }
 
 html, body, #__next { height: 100%; }
+html { scroll-behavior: smooth; }
 
 body {
   @apply bg-slate-950 text-white antialiased;
@@ -23,7 +24,7 @@ body {
 /* Components */
 @layer components {
   .container-page { @apply max-w-7xl mx-auto px-6 sm:px-8; }
-  .btn { @apply inline-flex items-center gap-2 rounded-xl px-5 py-3 font-semibold transition; }
+  .btn { @apply inline-flex items-center gap-2 rounded-xl px-5 py-3 font-semibold transition focus:outline-none focus:ring-2 focus:ring-blue-500/60; }
   .btn-primary { @apply btn bg-gradient-to-r from-orange-500 to-blue-600 hover:from-orange-400 hover:to-blue-500 shadow-lg shadow-blue-950/40; }
   .btn-secondary { @apply btn bg-white/10 hover:bg-white/20 backdrop-blur border border-white/10; }
   .badge { @apply inline-flex items-center rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs font-medium text-white/80; }
@@ -50,8 +51,14 @@ body {
 }
 @keyframes scan { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
 
+/* Responsive grids */
 .grid-auto-fit { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.hero-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
+@media (min-width: 768px) {
+  .hero-grid { grid-template-columns: 1.2fr 1fr; align-items: center; }
+}
 
+/* Footer underline hover */
 .footer-link { @apply relative; }
 .footer-link::after { content:""; position:absolute; left:0; bottom:-2px; height:2px; width:0;
   background: linear-gradient(90deg, hsl(var(--brand-start)), hsl(var(--brand-end)));
@@ -59,31 +66,22 @@ body {
 }
 .footer-link:hover::after { width:100%; }
 
+/* Inputs */
 .input { @apply w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500; }
 .textarea { @apply input min-h-[140px]; }
 
+/* Mockup frame */
 .mockup { box-shadow: 0 20px 60px -20px rgba(30,58,138,.45), inset 0 0 0 1px rgba(255,255,255,.06); }
 
 /* Skip link for accessibility */
-.skip-link {
-  @apply sr-only focus:not-sr-only fixed left-2 top-2 z-[100] rounded bg-black/80 px-3 py-2 text-white;
-}
+.skip-link { @apply sr-only focus:not-sr-only fixed left-2 top-2 z-[100] rounded bg-black/80 px-3 py-2 text-white; }
 
-/* New: Pricing table styles for better scannability */
-.pricing-table {
-  @apply w-full border-collapse;
-}
-.pricing-table th {
-  @apply bg-white/5 py-3 px-4 text-left font-semibold border-b border-white/10;
-}
-.pricing-table td {
-  @apply py-3 px-4 border-b border-white/10;
-}
-.pricing-table tr:last-child td {
-  @apply border-b-0;
-}
+/* Pricing table */
+.pricing-table { @apply w-full border-collapse; }
+.pricing-table th { @apply bg-white/5 py-3 px-4 text-left font-semibold border-b border-white/10; }
+.pricing-table td { @apply py-3 px-4 border-b border-white/10; }
+.pricing-table tr:last-child td { @apply border-b-0; }
 
-/* New: More whitespace for sections */
-section {
-  @apply py-20 sm:py-24;  /* Increased padding for better breathing room */
-}
+/* Section spacing + anchor offset so sticky nav doesn’t cover headings */
+section { @apply py-20 sm:py-24; }
+[id] { scroll-margin-top: 96px; } /* sticky header height + spacing */

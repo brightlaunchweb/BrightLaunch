@@ -1,14 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { FaLinkedin, FaTwitter, FaInstagram } from "react-icons/fa";  // Added imports for social icons
+import Image from "next/image";
+import { FaLinkedin, FaTwitter, FaInstagram } from "react-icons/fa";
 
 /** --- GA4 helper --- */
-declare global {
-  interface Window {
-    gtag?: (...args: any[]) => void;
-  }
-}
+declare global { interface Window { gtag?: (...args: any[]) => void; } }
 function gaEvent(action: string, params?: Record<string, any>) {
   if (typeof window !== "undefined" && typeof window.gtag === "function") {
     window.gtag("event", action, params || {});
@@ -51,10 +48,7 @@ export default function Page() {
       if (!res.ok) throw new Error((await res.json()).error || "Failed to send");
 
       setStatus("sent");
-      gaEvent("generate_lead", {
-        method: "contact_form",
-        plan: (payload as any).plan || "(none)",
-      });
+      gaEvent("generate_lead", { method: "contact_form", plan: (payload as any).plan || "(none)" });
       form.reset();
       setSelectedPlan(null);
     } catch (err: any) {
@@ -63,8 +57,7 @@ export default function Page() {
     }
   }
 
-  // New: Portfolio data with images and descriptions
-  const portfolioItems = [
+  const portfolio = [
     { title: "Coffee Shop Site", desc: "Clean, mobile-first design boosting online orders by 30%.", img: "/mockup1.jpg" },
     { title: "Local Charity Page", desc: "Donation-focused layout increasing contributions.", img: "/mockup2.jpg" },
     { title: "Handyman Services", desc: "Simple booking system for local leads.", img: "/mockup3.jpg" },
@@ -73,7 +66,6 @@ export default function Page() {
     { title: "Cafe Menu Online", desc: "Interactive menu with location map.", img: "/mockup6.jpg" },
   ];
 
-  // New: Enhanced testimonials with avatars and metrics
   const testimonials = [
     { name: "Jane Doe", company: "Coffee Roasters", quote: "“BrightLaunch delivered a gorgeous site. Online orders jumped 30% within days.”", avatar: "/avatar1.jpg" },
     { name: "John Smith", company: "Local Charity", quote: "“Simple for volunteers to donate on mobile. Donations up 25%.”", avatar: "/avatar2.jpg" },
@@ -81,28 +73,25 @@ export default function Page() {
   ];
 
   return (
-    <main id="main">
-      {/* Sticky header (appears after scroll) - Added "Book a Call Now" for urgency */}
+    <main id="main" aria-live="polite">
+      {/* Sticky header */}
       <header
         className={[
           "fixed inset-x-0 top-0 z-50 transition-all",
           scrolled ? "bg-slate-950/70 backdrop-blur border-b border-white/10" : "bg-transparent translate-y-[-120%]",
         ].join(" ")}
-        aria-label="Main navigation"
+        aria-label="Main"
       >
         <div className="container-page h-14 flex items-center justify-between">
-          <a href="#top" className="font-semibold">BrightLaunch</a>
-          <nav className="hidden sm:flex items-center gap-6">
+          <a href="#top" className="font-semibold" aria-label="BrightLaunch home">BrightLaunch</a>
+          <nav className="hidden sm:flex items-center gap-6" aria-label="Primary">
             <a href="#services" className="nav-link">Services</a>
             <a href="#work" className="nav-link">Work</a>
             <a href="#pricing" className="nav-link">Pricing</a>
             <a href="#faq" className="nav-link">FAQ</a>
           </nav>
           <button
-            onClick={() => {
-              gaEvent("cta_click", { label: "book_call_header" });
-              jumpToContact();
-            }}
+            onClick={() => { gaEvent("cta_click", { label: "book_call_header" }); jumpToContact(); }}
             className="btn-primary hidden sm:inline-flex"
           >
             Book a Call Now
@@ -110,12 +99,12 @@ export default function Page() {
         </div>
       </header>
 
-      {/* Hero - Added image instead of placeholder, updated copy for benefits */}
+      {/* Hero */}
       <section id="top" className="relative overflow-hidden">
         <div className="container-page pt-24 sm:pt-28 md:pt-32 pb-16 sm:pb-20">
-          <div className="grid hero-grid gap-10 items-center">  {/* Assume hero-grid is defined elsewhere or in CSS */}
+          <div className="grid hero-grid gap-10 items-center">
             <div>
-              <span className="badge">Modern web design</span>
+              <span className="badge" aria-label="Category">Modern web design</span>
               <h1 className="mt-4 text-4xl sm:text-5xl md:text-6xl font-black leading-[1.05]">
                 Launch a site that <span className="gradient-text">wins customers & donors</span>
               </h1>
@@ -124,46 +113,36 @@ export default function Page() {
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-4">
                 <button
-                  onClick={() => {
-                    gaEvent("cta_click", { label: "hero_free_mockup" });
-                    jumpToContact();
-                  }}
+                  onClick={() => { gaEvent("cta_click", { label: "hero_free_mockup" }); jumpToContact(); }}
                   className="btn-primary"
                 >
                   Get a Free Mockup Today
                 </button>
-                <a
-                  href="#pricing"
-                  onClick={() => gaEvent("nav_click", { label: "see_pricing_hero" })}
-                  className="btn-secondary"
-                >
+                <a href="#pricing" onClick={() => gaEvent("nav_click", { label: "see_pricing_hero" })} className="btn-secondary">
                   View Pricing
                 </a>
-                <a
-                  href="#contact"
-                  onClick={() => gaEvent("cta_click", { label: "book_call_hero" })}
-                  className="text-white/70 hover:text-white underline underline-offset-4"
-                >
+                <a href="#contact" onClick={() => gaEvent("cta_click", { label: "book_call_hero" })} className="text-white/70 hover:text-white underline underline-offset-4">
                   Book a 15-min Call
                 </a>
               </div>
-
-              {/* Who we’re perfect for */}
-              <ul className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-2 text-white/70">
+              <ul className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-2 text-white/70" aria-label="Perfect for">
                 <li>• Home & local services</li>
                 <li>• Boutiques & cafes</li>
                 <li>• Nonprofits & clubs</li>
               </ul>
             </div>
 
-            {/* Right: Real mockup image */}
+            {/* Right visual */}
             <div className="relative">
               <div className="card glow-line mockup">
                 <div className="card-inner">
-                  <img 
-                    src="/hero-mockup.jpg" 
-                    alt="Sample modern website mockup for small business" 
+                  <Image
+                    src="/hero-mockup.jpg"
+                    alt="Sample modern website mockup for a small business"
+                    width={1280}
+                    height={820}
                     className="w-full h-auto rounded-xl"
+                    priority
                   />
                 </div>
               </div>
@@ -172,17 +151,17 @@ export default function Page() {
         </div>
       </section>
 
-      {/* New Section: Why Choose Us - Benefits with icons/bullet points for skimmability */}
+      {/* Why us */}
       <section id="why-us" className="container-page">
         <h2 className="section-title">Why Choose BrightLaunch?</h2>
         <p className="section-sub">Tailored for small teams who need results fast.</p>
         <div className="mt-10 grid grid-auto-fit gap-6">
           {[
-            { title: "Fast Launches", desc: "Sites ready in 1-3 weeks, not months." },
+            { title: "Fast Launches", desc: "Sites ready in 1–3 weeks, not months." },
             { title: "Affordable Pricing", desc: "Starting at $799 — no hidden fees." },
             { title: "Mobile-First", desc: "Optimized for phones to drive local traffic." },
             { title: "Nonprofit Discounts", desc: "Special rates for charities and clubs." },
-            { title: "Proven Results", desc: "Boost conversions by 20-30% on average." },
+            { title: "Proven Results", desc: "Boost conversions by 20–30% on average." },
             { title: "Ongoing Support", desc: "Monthly care plans for peace of mind." },
           ].map(({ title, desc }) => (
             <div className="card" key={title}>
@@ -195,7 +174,7 @@ export default function Page() {
         </div>
       </section>
 
-      {/* Services/Process - Minor copy tweaks for benefits */}
+      {/* Services / Process */}
       <section id="services" className="container-page">
         <h2 className="section-title">Our simple process</h2>
         <p className="section-sub">From brief to launch in days — we handle the heavy lifting.</p>
@@ -217,24 +196,30 @@ export default function Page() {
         </ol>
       </section>
 
-      {/* Portfolio/Work - Updated with real items, images, descriptions */}
+      {/* Portfolio */}
       <section id="work" className="container-page">
         <h2 className="section-title">Recent Work & Mockups</h2>
         <p className="section-sub">Clean layouts, bold type, smooth interactions — see what we can do for you.</p>
         <div className="mt-10 grid grid-auto-fit gap-6">
-          {portfolioItems.map(({ title, desc, img }) => (
-            <div className="card mockup" key={title}>
+          {portfolio.map(({ title, desc, img }) => (
+            <article className="card mockup" key={title} aria-label={title}>
               <div className="card-inner">
-                <img src={img} alt={`${title} mockup`} className="w-full h-auto rounded-xl" />
+                <Image
+                  src={img}
+                  alt={`${title} mockup`}
+                  width={1280}
+                  height={820}
+                  className="w-full h-auto rounded-xl"
+                />
                 <h3 className="mt-4 text-xl font-semibold">{title}</h3>
                 <p className="mt-2 text-white/70">{desc}</p>
               </div>
-            </div>
+            </article>
           ))}
         </div>
       </section>
 
-      {/* Pricing - Changed to table for scannability, added CTA per row */}
+      {/* Pricing */}
       <section id="pricing" className="container-page">
         <h2 className="section-title">Simple Pricing</h2>
         <p className="section-sub">Packages for every need — nonprofits get 20% off.</p>
@@ -242,11 +227,11 @@ export default function Page() {
           <table className="pricing-table">
             <thead>
               <tr>
-                <th>Plan</th>
-                <th>Price</th>
-                <th>Features</th>
-                <th>Timeline</th>
-                <th></th>  {/* CTA column */}
+                <th scope="col">Plan</th>
+                <th scope="col">Price</th>
+                <th scope="col">Features</th>
+                <th scope="col">Timeline</th>
+                <th scope="col" aria-label="Actions"></th>
               </tr>
             </thead>
             <tbody>
@@ -256,10 +241,7 @@ export default function Page() {
                 <td>One-page site, copy & images included, 1 round of edits</td>
                 <td>~7 days</td>
                 <td>
-                  <button 
-                    onClick={() => jumpToContact("Starter")} 
-                    className="btn-primary text-sm"
-                  >
+                  <button onClick={() => jumpToContact("Starter")} className="btn-primary text-sm">
                     Get Started
                   </button>
                 </td>
@@ -270,10 +252,7 @@ export default function Page() {
                 <td>Up to 6 pages, brand polish & icons, blog setup</td>
                 <td>~2–3 weeks</td>
                 <td>
-                  <button 
-                    onClick={() => jumpToContact("Business")} 
-                    className="btn-primary text-sm"
-                  >
+                  <button onClick={() => jumpToContact("Business")} className="btn-primary text-sm">
                     Get Started
                   </button>
                 </td>
@@ -284,20 +263,20 @@ export default function Page() {
                 <td>Hosting & SSL, edits & updates, backups & monitoring, priority support</td>
                 <td>Ongoing</td>
                 <td>
-                  <button 
-                    onClick={() => jumpToContact("Care Plan")} 
-                    className="btn-primary text-sm"
-                  >
+                  <button onClick={() => jumpToContact("Care Plan")} className="btn-primary text-sm">
                     Get Started
                   </button>
                 </td>
               </tr>
             </tbody>
           </table>
+          {selectedPlan && (
+            <p className="mt-3 text-sm text-white/70">You selected: <span className="font-semibold">{selectedPlan}</span></p>
+          )}
         </div>
       </section>
 
-      {/* Testimonials - Enhanced with avatars, names, metrics */}
+      {/* Testimonials */}
       <section id="testimonials" className="container-page">
         <h2 className="section-title">Kind Words from Clients</h2>
         <p className="section-sub">Real results for small teams like yours.</p>
@@ -307,7 +286,7 @@ export default function Page() {
               <div className="card-inner">
                 <p className="text-white/80">{quote}</p>
                 <footer className="mt-4 flex items-center gap-3">
-                  <img src={avatar} alt={`${name} avatar`} className="w-10 h-10 rounded-full" />
+                  <Image src={avatar} alt={`${name} avatar`} width={40} height={40} className="rounded-full" />
                   <div>
                     <div className="font-semibold">{name}</div>
                     <div className="text-white/50">{company}</div>
@@ -319,7 +298,7 @@ export default function Page() {
         </div>
       </section>
 
-      {/* FAQ - Expanded with more questions */}
+      {/* FAQ */}
       <section id="faq" className="container-page">
         <h2 className="section-title">Frequently Asked Questions</h2>
         <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -341,7 +320,7 @@ export default function Page() {
         </div>
       </section>
 
-      {/* Contact - Added privacy note for transparency */}
+      {/* Contact */}
       <section id="contact" className="container-page">
         <div className="card">
           <div className="card-inner">
@@ -353,22 +332,28 @@ export default function Page() {
                   <li>• 15-minute intro call available</li>
                   <li>• Nonprofits: ask about discounted rates</li>
                 </ul>
+                {selectedPlan && (
+                  <p className="mt-4 text-sm text-white/70">
+                    Selected plan: <span className="font-semibold">{selectedPlan}</span>
+                  </p>
+                )}
               </div>
-              <form className="space-y-4" onSubmit={onSubmit}>
-                <input className="input" name="name" placeholder="Your name" required />
-                <input className="input" name="email" type="email" placeholder="Email" required />
-                <input className="input" name="company" placeholder="Business / nonprofit" />
+              <form className="space-y-4" onSubmit={onSubmit} aria-label="Contact form">
+                <label className="sr-only" htmlFor="name">Your name</label>
+                <input className="input" id="name" name="name" placeholder="Your name" required />
+                <label className="sr-only" htmlFor="email">Email</label>
+                <input className="input" id="email" name="email" type="email" placeholder="Email" required />
+                <label className="sr-only" htmlFor="company">Business / nonprofit</label>
+                <input className="input" id="company" name="company" placeholder="Business / nonprofit" />
+                <label className="sr-only" htmlFor="message">Message</label>
                 <textarea
                   className="textarea"
+                  id="message"
                   name="message"
                   placeholder="What do you need? (e.g., 3-page site, online booking, donate page)"
                   required
                 />
-
-                {/* Selected plan (prefilled when clicking Get started) */}
                 <input type="hidden" name="plan" value={selectedPlan ?? ""} />
-
-                {/* Honeypot anti-spam field */}
                 <input type="text" name="website" className="hidden" tabIndex={-1} autoComplete="off" />
 
                 <button
@@ -388,23 +373,23 @@ export default function Page() {
         </div>
       </section>
 
-      {/* Footer - Added social links */}
+      {/* Footer */}
       <footer className="border-t border-white/10">
         <div className="container-page py-10 flex flex-col sm:flex-row items-center justify-between gap-3 text-white/60 text-sm">
           <div>© {new Date().getFullYear()} BrightLaunch</div>
-          <nav className="flex items-center gap-6">
+          <nav className="flex items-center gap-6" aria-label="Footer">
             <a href="#services" className="footer-link">Services</a>
             <a href="#pricing" className="footer-link">Pricing</a>
             <a href="#contact" className="footer-link">Contact</a>
           </nav>
-          <div className="flex items-center gap-4">
-            <a href="https://linkedin.com/company/brightlaunch" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white">
+          <div className="flex items-center gap-4" aria-label="Social">
+            <a href="https://linkedin.com/company/brightlaunch" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white" aria-label="LinkedIn">
               <FaLinkedin size={20} />
             </a>
-            <a href="https://twitter.com/bright_launch" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white">
+            <a href="https://twitter.com/bright_launch" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white" aria-label="Twitter / X">
               <FaTwitter size={20} />
             </a>
-            <a href="https://instagram.com/brightlaunch" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white">
+            <a href="https://instagram.com/brightlaunch" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white" aria-label="Instagram">
               <FaInstagram size={20} />
             </a>
           </div>

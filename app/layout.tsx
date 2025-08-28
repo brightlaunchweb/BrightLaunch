@@ -8,22 +8,28 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.brightlaunchweb.com"),
   title: "BrightLaunch: Affordable, Fast Websites for Small Businesses & Nonprofits",
-  description: "Launch a sleek, mobile-first website in days. Perfect for boutiques, cafes, charities. Starting at $799 with quick turnaround.",
-  keywords: "small business web design, nonprofit websites, affordable website design, mobile-first sites, local SEO",
+  description:
+    "Launch a sleek, mobile-first website in days. Perfect for boutiques, cafes, charities. Starting at $799 with quick turnaround.",
+  keywords:
+    "small business web design, nonprofit websites, affordable website design, mobile-first sites, local SEO",
   openGraph: {
     type: "website",
     url: "https://www.brightlaunchweb.com",
     title: "BrightLaunch: Affordable, Fast Websites for Small Businesses & Nonprofits",
-    description: "Launch a sleek, mobile-first website in days. Perfect for boutiques, cafes, charities. Starting at $799 with quick turnaround.",
+    description:
+      "Launch a sleek, mobile-first website in days. Perfect for boutiques, cafes, charities. Starting at $799 with quick turnaround.",
     images: [{ url: "/og.jpg", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
     title: "BrightLaunch: Affordable, Fast Websites for Small Businesses & Nonprofits",
-    description: "Launch a sleek, mobile-first website in days. Perfect for boutiques, cafes, charities. Starting at $799 with quick turnaround.",
+    description:
+      "Launch a sleek, mobile-first website in days. Perfect for boutiques, cafes, charities. Starting at $799 with quick turnaround.",
     images: ["/og.jpg"],
   },
-  icons: { icon: "/favicon.ico" },
+  icons: { icon: "/favicon.ico", apple: "/apple-touch-icon.png" },
+  alternates: { canonical: "https://www.brightlaunchweb.com" },
+  themeColor: "#020617",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -47,7 +53,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             }),
           }}
         />
-        {/* FAQ schema (updated with more questions) */}
+        {/* FAQ schema */}
         <Script
           id="ld-faq"
           type="application/ld+json"
@@ -67,48 +73,33 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 {
                   "@type": "Question",
                   name: "Do you help with content?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "Yes — we draft copy, suggest images, and set tone based on your brand.",
-                  },
+                  acceptedAnswer: { "@type": "Answer", text: "Yes — we draft copy, suggest images, and set tone based on your brand." },
                 },
                 {
                   "@type": "Question",
                   name: "Can you redesign my existing site?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "Absolutely. We’ll audit what works, then rebuild or refresh for performance and clarity.",
-                  },
+                  acceptedAnswer: { "@type": "Answer", text: "Absolutely. We’ll audit what works, then rebuild or refresh for performance and clarity." },
                 },
                 {
                   "@type": "Question",
                   name: "What about timelines?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "Most launches are within 1–3 weeks depending on scope.",
-                  },
+                  acceptedAnswer: { "@type": "Answer", text: "Most launches are within 1–3 weeks depending on scope." },
                 },
                 {
                   "@type": "Question",
                   name: "What if I need e-commerce features?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "We integrate simple shops with Stripe or Shopify for easy sales and donations.",
-                  },
+                  acceptedAnswer: { "@type": "Answer", text: "We integrate simple shops with Stripe or Shopify for easy sales and donations." },
                 },
                 {
                   "@type": "Question",
                   name: "How do you handle SEO?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "We optimize for local search, add meta tags, and set up Google Analytics/Search Console.",
-                  },
+                  acceptedAnswer: { "@type": "Answer", text: "We optimize for local search, add meta tags, and set up Google Analytics/Search Console." },
                 },
               ],
             }),
           }}
         />
-        {/* New: Service schema for better rich snippets */}
+        {/* Service schema */}
         <Script
           id="ld-service"
           type="application/ld+json"
@@ -117,10 +108,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               "@context": "https://schema.org",
               "@type": "Service",
               serviceType: "Website Design",
-              provider: {
-                "@type": "Organization",
-                name: "BrightLaunch",
-              },
+              provider: { "@type": "Organization", name: "BrightLaunch" },
               areaServed: "Worldwide",
               hasOfferCatalog: {
                 "@type": "OfferCatalog",
@@ -128,10 +116,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 itemListElement: [
                   {
                     "@type": "Offer",
-                    itemOffered: {
-                      "@type": "Service",
-                      name: "Starter Website",
-                    },
+                    itemOffered: { "@type": "Service", name: "Starter Website" },
                     price: 799,
                     priceCurrency: "USD",
                   },
