@@ -401,7 +401,7 @@ export default function Page() {
             <a href="https://linkedin.com/company/brightlaunch" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white">
               <FaLinkedin size={20} />
             </a>
-            <a href="https://twitter.com/brightlaunch" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white">
+            <a href="https://twitter.com/bright_launch" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white">
               <FaTwitter size={20} />
             </a>
             <a href="https://instagram.com/brightlaunch" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white">
