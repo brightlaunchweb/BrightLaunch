@@ -1,15 +1,81 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import { FaLinkedin, FaTwitter, FaInstagram } from "react-icons/fa";
 
-/** --- GA4 helper --- */
+/** Optional GA4 helper */
 declare global { interface Window { gtag?: (...args: any[]) => void; } }
 function gaEvent(action: string, params?: Record<string, any>) {
   if (typeof window !== "undefined" && typeof window.gtag === "function") {
     window.gtag("event", action, params || {});
   }
+}
+
+/** Animated shimmer block used in mockups */
+function Shimmer({ className = "" }: { className?: string }) {
+  return (
+    <div
+      className={[
+        "relative overflow-hidden rounded-md bg-white/5 border border-white/10",
+        className,
+      ].join(" ")}
+    >
+      <div
+        className="absolute inset-0 -translate-x-full animate-[shimmer_2.5s_infinite] bg-gradient-to-r from-transparent via-white/10 to-transparent"
+        aria-hidden
+      />
+      <style>{`@keyframes shimmer { 100% { transform: translateX(100%); } }`}</style>
+    </div>
+  );
+}
+
+/** Right-side hero visual: faux browser + phone */
+function HeroShowcase() {
+  return (
+    <div className="relative">
+      <div className="card mockup">
+        <div className="card-inner">
+          {/* Browser chrome */}
+          <div className="flex items-center gap-2 pb-3">
+            <span className="inline-block h-2.5 w-2.5 rounded-full bg-red-400/80" />
+            <span className="inline-block h-2.5 w-2.5 rounded-full bg-yellow-300/80" />
+            <span className="inline-block h-2.5 w-2.5 rounded-full bg-green-400/80" />
+            <div className="ml-3 text-xs text-white/50">brightlaunch preview</div>
+          </div>
+
+          {/* Browser content */}
+          <div className="grid gap-3">
+            <Shimmer className="h-8" />
+            <div className="grid grid-cols-3 gap-3">
+              <Shimmer className="h-20 col-span-2" />
+              <Shimmer className="h-20" />
+            </div>
+            <div className="grid grid-cols-3 gap-3">
+              <Shimmer className="h-24" />
+              <Shimmer className="h-24" />
+              <Shimmer className="h-24" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Phone overlay */}
+      <div className="absolute -bottom-6 -right-4 w-40 sm:w-48 md:w-56 lg:w-64">
+        <div className="rounded-[2rem] border border-white/10 bg-gradient-to-b from-slate-900 to-slate-800 p-3 shadow-2xl">
+          <div className="rounded-2xl bg-black/20 p-2">
+            <Shimmer className="h-6" />
+            <div className="mt-2 grid gap-2">
+              <Shimmer className="h-24" />
+              <div className="grid grid-cols-2 gap-2">
+                <Shimmer className="h-10" />
+                <Shimmer className="h-10" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default function Page() {
@@ -27,8 +93,7 @@ export default function Page() {
 
   function jumpToContact(plan?: string) {
     if (plan) setSelectedPlan(plan);
-    const el = document.getElementById("contact");
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    document.getElementById("contact")?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -46,7 +111,6 @@ export default function Page() {
         body: JSON.stringify(payload),
       });
       if (!res.ok) throw new Error((await res.json()).error || "Failed to send");
-
       setStatus("sent");
       gaEvent("generate_lead", { method: "contact_form", plan: (payload as any).plan || "(none)" });
       form.reset();
@@ -58,18 +122,14 @@ export default function Page() {
   }
 
   const portfolio = [
-    { title: "Coffee Shop Site", desc: "Clean, mobile-first design boosting online orders by 30%.", img: "/mockup1.jpg" },
-    { title: "Local Charity Page", desc: "Donation-focused layout increasing contributions.", img: "/mockup2.jpg" },
-    { title: "Handyman Services", desc: "Simple booking system for local leads.", img: "/mockup3.jpg" },
-    { title: "Boutique Store", desc: "Elegant e-commerce integration.", img: "/mockup4.jpg" },
-    { title: "Nonprofit Event Site", desc: "Event registration and volunteer signup.", img: "/mockup5.jpg" },
-    { title: "Cafe Menu Online", desc: "Interactive menu with location map.", img: "/mockup6.jpg" },
+    { title: "Coffee Shop Site", desc: "Clean, mobile-first design boosting online orders." },
+    { title: "Local Charity Page", desc: "Donation-focused layout that converts." },
+    { title: "Handyman Services", desc: "Simple booking system for local leads." },
   ];
 
   const testimonials = [
-    { name: "Jane Doe", company: "Coffee Roasters", quote: "“BrightLaunch delivered a gorgeous site. Online orders jumped 30% within days.”", avatar: "/avatar1.jpg" },
-    { name: "John Smith", company: "Local Charity", quote: "“Simple for volunteers to donate on mobile. Donations up 25%.”", avatar: "/avatar2.jpg" },
-    { name: "Alex Lee", company: "Handyman Co.", quote: "“Fast, professional — Google calls increased immediately.”", avatar: "/avatar3.jpg" },
+    { name: "Jane Doe", company: "Coffee Roasters", quote: "“BrightLaunch delivered a gorgeous site. Orders up 30%.”" },
+    { name: "John Smith", company: "Local Charity", quote: "“Easy to donate on mobile. Contributions increased.”" },
   ];
 
   return (
@@ -94,29 +154,28 @@ export default function Page() {
             onClick={() => { gaEvent("cta_click", { label: "book_call_header" }); jumpToContact(); }}
             className="btn-primary hidden sm:inline-flex"
           >
-            Book a Call Now
+            Book a Call
           </button>
         </div>
       </header>
 
-      {/* Hero */}
+      {/* HERO — tighter top space + new headline + real visual */}
       <section id="top" className="relative overflow-hidden">
-        <div className="container-page pt-24 sm:pt-28 md:pt-32 pb-16 sm:pb-20">
+        {/* tightened hero padding */}
+        <div className="container-page pt-14 sm:pt-16 md:pt-20 pb-14 sm:pb-16">
           <div className="grid hero-grid gap-10 items-center">
             <div>
-              <span className="badge" aria-label="Category">Modern web design</span>
+              <span className="badge">Modern web design</span>
               <h1 className="mt-4 text-4xl sm:text-5xl md:text-6xl font-black leading-[1.05]">
-                Launch a site that <span className="gradient-text">wins customers & donors</span>
+                <span className="gradient-text">Modern websites</span> that grow customers & supporters
               </h1>
               <p className="section-sub">
-                Sleek, fast, mobile-first websites for small businesses and nonprofits. Quick launches, proven results — boost traffic and conversions without the hassle.
+                Sleek, fast, mobile-first sites built for small businesses and nonprofits.
+                Clear messaging, clean design, and performance that helps people convert.
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-4">
-                <button
-                  onClick={() => { gaEvent("cta_click", { label: "hero_free_mockup" }); jumpToContact(); }}
-                  className="btn-primary"
-                >
-                  Get a Free Mockup Today
+                <button onClick={() => { gaEvent("cta_click", { label: "hero_free_mockup" }); jumpToContact(); }} className="btn-primary">
+                  Get a Free Mockup
                 </button>
                 <a href="#pricing" onClick={() => gaEvent("nav_click", { label: "see_pricing_hero" })} className="btn-secondary">
                   View Pricing
@@ -133,20 +192,7 @@ export default function Page() {
             </div>
 
             {/* Right visual */}
-            <div className="relative">
-              <div className="card glow-line mockup">
-                <div className="card-inner">
-                  <Image
-                    src="/hero-mockup.jpg"
-                    alt="Sample modern website mockup for a small business"
-                    width={1280}
-                    height={820}
-                    className="w-full h-auto rounded-xl"
-                    priority
-                  />
-                </div>
-              </div>
-            </div>
+            <HeroShowcase />
           </div>
         </div>
       </section>
@@ -158,11 +204,11 @@ export default function Page() {
         <div className="mt-10 grid grid-auto-fit gap-6">
           {[
             { title: "Fast Launches", desc: "Sites ready in 1–3 weeks, not months." },
-            { title: "Affordable Pricing", desc: "Starting at $799 — no hidden fees." },
+            { title: "Affordable", desc: "Starting at $799 — no hidden fees." },
             { title: "Mobile-First", desc: "Optimized for phones to drive local traffic." },
             { title: "Nonprofit Discounts", desc: "Special rates for charities and clubs." },
-            { title: "Proven Results", desc: "Boost conversions by 20–30% on average." },
-            { title: "Ongoing Support", desc: "Monthly care plans for peace of mind." },
+            { title: "Built to Convert", desc: "Clear CTAs, speed, and SEO best practices." },
+            { title: "Ongoing Care", desc: "Edits, updates, and monitoring available." },
           ].map(({ title, desc }) => (
             <div className="card" key={title}>
               <div className="card-inner">
@@ -174,43 +220,15 @@ export default function Page() {
         </div>
       </section>
 
-      {/* Services / Process */}
-      <section id="services" className="container-page">
-        <h2 className="section-title">Our simple process</h2>
-        <p className="section-sub">From brief to launch in days — we handle the heavy lifting.</p>
-        <ol className="mt-10 grid grid-auto-fit gap-6">
-          {[
-            ["Brief & plan", "Share your goals; we map pages, features, and tone."],
-            ["Design & build", "Custom mockups, then code with Next.js for speed."],
-            ["Review & tweak", "Your feedback, one round of edits included."],
-            ["Launch & care", "Deploy, domain setup, analytics, SEO, and ongoing support."],
-          ].map(([title, desc], idx) => (
-            <li className="card" key={title}>
-              <div className="card-inner">
-                <div className="text-sm text-white/50">Step {idx + 1}</div>
-                <h3 className="mt-1 text-xl font-semibold">{title}</h3>
-                <p className="mt-2 text-white/70">{desc}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
-      </section>
-
-      {/* Portfolio */}
+      {/* Work */}
       <section id="work" className="container-page">
         <h2 className="section-title">Recent Work & Mockups</h2>
-        <p className="section-sub">Clean layouts, bold type, smooth interactions — see what we can do for you.</p>
+        <p className="section-sub">Clean layouts, bold type, smooth interactions.</p>
         <div className="mt-10 grid grid-auto-fit gap-6">
-          {portfolio.map(({ title, desc, img }) => (
+          {portfolio.map(({ title, desc }) => (
             <article className="card mockup" key={title} aria-label={title}>
               <div className="card-inner">
-                <Image
-                  src={img}
-                  alt={`${title} mockup`}
-                  width={1280}
-                  height={820}
-                  className="w-full h-auto rounded-xl"
-                />
+                <Shimmer className="h-44 rounded-xl" />
                 <h3 className="mt-4 text-xl font-semibold">{title}</h3>
                 <p className="mt-2 text-white/70">{desc}</p>
               </div>
@@ -238,41 +256,27 @@ export default function Page() {
               <tr>
                 <td>Starter</td>
                 <td>$799</td>
-                <td>One-page site, copy & images included, 1 round of edits</td>
+                <td>One-page site, copy & images, 1 round of edits</td>
                 <td>~7 days</td>
-                <td>
-                  <button onClick={() => jumpToContact("Starter")} className="btn-primary text-sm">
-                    Get Started
-                  </button>
-                </td>
+                <td><button onClick={() => jumpToContact("Starter")} className="btn-primary text-sm">Get Started</button></td>
               </tr>
               <tr>
                 <td>Business</td>
                 <td>$1,999</td>
                 <td>Up to 6 pages, brand polish & icons, blog setup</td>
                 <td>~2–3 weeks</td>
-                <td>
-                  <button onClick={() => jumpToContact("Business")} className="btn-primary text-sm">
-                    Get Started
-                  </button>
-                </td>
+                <td><button onClick={() => jumpToContact("Business")} className="btn-primary text-sm">Get Started</button></td>
               </tr>
               <tr>
                 <td>Care Plan</td>
                 <td>$79/mo</td>
-                <td>Hosting & SSL, edits & updates, backups & monitoring, priority support</td>
+                <td>Hosting & SSL, edits & updates, backups & monitoring</td>
                 <td>Ongoing</td>
-                <td>
-                  <button onClick={() => jumpToContact("Care Plan")} className="btn-primary text-sm">
-                    Get Started
-                  </button>
-                </td>
+                <td><button onClick={() => jumpToContact("Care Plan")} className="btn-primary text-sm">Get Started</button></td>
               </tr>
             </tbody>
           </table>
-          {selectedPlan && (
-            <p className="mt-3 text-sm text-white/70">You selected: <span className="font-semibold">{selectedPlan}</span></p>
-          )}
+          {selectedPlan && <p className="mt-3 text-sm text-white/70">You selected: <span className="font-semibold">{selectedPlan}</span></p>}
         </div>
       </section>
 
@@ -281,17 +285,11 @@ export default function Page() {
         <h2 className="section-title">Kind Words from Clients</h2>
         <p className="section-sub">Real results for small teams like yours.</p>
         <div className="mt-10 grid grid-auto-fit gap-6">
-          {testimonials.map(({ name, company, quote, avatar }) => (
+          {testimonials.map(({ name, company, quote }) => (
             <blockquote className="card" key={company}>
               <div className="card-inner">
                 <p className="text-white/80">{quote}</p>
-                <footer className="mt-4 flex items-center gap-3">
-                  <Image src={avatar} alt={`${name} avatar`} width={40} height={40} className="rounded-full" />
-                  <div>
-                    <div className="font-semibold">{name}</div>
-                    <div className="text-white/50">{company}</div>
-                  </div>
-                </footer>
+                <footer className="mt-4 text-white/50">{name} — {company}</footer>
               </div>
             </blockquote>
           ))}
@@ -307,8 +305,6 @@ export default function Page() {
             ["Do you help with content?", "Yes — we draft copy, suggest images, and set tone based on your brand."],
             ["Can you redesign my existing site?", "Absolutely. We’ll audit what works, then rebuild or refresh for performance and clarity."],
             ["What about timelines?", "Most launches are within 1–3 weeks depending on scope."],
-            ["What if I need e-commerce features?", "We integrate simple shops with Stripe or Shopify for easy sales and donations."],
-            ["How do you handle SEO?", "We optimize for local search, add meta tags, and set up Google Analytics/Search Console."],
           ].map(([q, a]) => (
             <div className="card" key={q}>
               <div className="card-inner">
@@ -328,16 +324,9 @@ export default function Page() {
               <div>
                 <h2 className="section-title">Tell Us About Your Project</h2>
                 <p className="section-sub">We’ll reply within 1 business day with a mini-brief and suggested package.</p>
-                <ul className="mt-6 space-y-2 text-white/80">
-                  <li>• 15-minute intro call available</li>
-                  <li>• Nonprofits: ask about discounted rates</li>
-                </ul>
-                {selectedPlan && (
-                  <p className="mt-4 text-sm text-white/70">
-                    Selected plan: <span className="font-semibold">{selectedPlan}</span>
-                  </p>
-                )}
+                {selectedPlan && <p className="mt-4 text-sm text-white/70">Selected plan: <span className="font-semibold">{selectedPlan}</span></p>}
               </div>
+
               <form className="space-y-4" onSubmit={onSubmit} aria-label="Contact form">
                 <label className="sr-only" htmlFor="name">Your name</label>
                 <input className="input" id="name" name="name" placeholder="Your name" required />
@@ -346,13 +335,8 @@ export default function Page() {
                 <label className="sr-only" htmlFor="company">Business / nonprofit</label>
                 <input className="input" id="company" name="company" placeholder="Business / nonprofit" />
                 <label className="sr-only" htmlFor="message">Message</label>
-                <textarea
-                  className="textarea"
-                  id="message"
-                  name="message"
-                  placeholder="What do you need? (e.g., 3-page site, online booking, donate page)"
-                  required
-                />
+                <textarea className="textarea" id="message" name="message" placeholder="What do you need? (e.g., 3-page site, booking, donate page)" required />
+
                 <input type="hidden" name="plan" value={selectedPlan ?? ""} />
                 <input type="text" name="website" className="hidden" tabIndex={-1} autoComplete="off" />
 
@@ -362,11 +346,11 @@ export default function Page() {
                   disabled={status === "sending"}
                   onClick={() => gaEvent("cta_click", { label: "contact_send" })}
                 >
-                  {status === "sending" ? "Sending…" : "Send Message Now"}
+                  {status === "sending" ? "Sending…" : "Send Message"}
                 </button>
                 {status === "sent" && <p className="text-green-400 text-sm">Thanks! Your message is on the way.</p>}
-                {status === "error" && <p className="text-red-400 text-sm">{error || "We could not send your message."}</p>}
-                <p className="text-xs text-white/50">We respect your privacy. Your data is used only for responding to inquiries.</p>
+                {status === "error" && <p className="text-red-400 text-sm">{error || "We couldn’t send your message."}</p>}
+                <p className="text-xs text-white/50">We respect your privacy. Your data is used only to respond to your inquiry.</p>
               </form>
             </div>
           </div>
@@ -383,15 +367,9 @@ export default function Page() {
             <a href="#contact" className="footer-link">Contact</a>
           </nav>
           <div className="flex items-center gap-4" aria-label="Social">
-            <a href="https://linkedin.com/company/brightlaunch" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white" aria-label="LinkedIn">
-              <FaLinkedin size={20} />
-            </a>
-            <a href="https://twitter.com/bright_launch" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white" aria-label="Twitter / X">
-              <FaTwitter size={20} />
-            </a>
-            <a href="https://instagram.com/brightlaunch" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white" aria-label="Instagram">
-              <FaInstagram size={20} />
-            </a>
+            <a href="https://linkedin.com/company/brightlaunch" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white" aria-label="LinkedIn"><FaLinkedin size={20} /></a>
+            <a href="https://twitter.com/bright_launch" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white" aria-label="Twitter / X"><FaTwitter size={20} /></a>
+            <a href="https://instagram.com/brightlaunch" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white" aria-label="Instagram"><FaInstagram size={20} /></a>
           </div>
         </div>
       </footer>
