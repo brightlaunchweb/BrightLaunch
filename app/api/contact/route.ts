@@ -1,5 +1,5 @@
 // /app/api/contact/route.ts
-import { Resend } from "resend";
+import nodemailer from 'nodemailer';
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -12,15 +12,21 @@ export async function POST(req: Request) {
       return Response.json({ ok: false, error: "Missing required fields" }, { status: 400 });
     }
 
-    const resend = new Resend(process.env.RESEND_API_KEY);
-    const to = process.env.MAIL_TO || "you@example.com";
-    const from = process.env.MAIL_FROM || "BrightLaunch <onboarding@resend.dev>"; // Updated to your subdomain when verified
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 587,
+      secure: false, // Use TLS
+      auth: {
+        user: process.env.GOOGLE_EMAIL,
+        pass: process.env.GOOGLE_APP_PASSWORD,
+      },
+    });
 
-    await resend.emails.send({
-      from,
-      to,
+    await transporter.sendMail({
+      from: `BrightLaunch <${process.env.GOOGLE_EMAIL}>`, // Sender appears as hello@brightlaunchweb.com
+      to: process.env.MAIL_TO, // Recipient (your email)
+      replyTo: email, // Replies go to the user's email
       subject: `New inquiry from ${name}${company ? ` at ${company}` : ""}`,
-      replyTo: email,
       text: `Name: ${name}
 Email: ${email}
 Company: ${company || "-"}
