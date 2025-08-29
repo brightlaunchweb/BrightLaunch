@@ -1,6 +1,7 @@
 // app/samples/page.tsx
 import Link from "next/link";
 import { samples } from "./data";
+import { getStyleKit } from "./stylekits";
 
 export const metadata = {
   title: "Sample Websites | BrightLaunch",
@@ -13,41 +14,50 @@ export default function SamplesGallery() {
       <section className="container-page">
         <h1 className="section-title">Sample Websites</h1>
         <p className="section-sub">
-          Explore a few example sites. Each demo is built with clean layouts, bold type, and smooth interactions.
+          Explore example sites with different styles — elegant serif, playful pastel, monochrome, neon, and more.
         </p>
 
         <div className="mt-10 grid grid-auto-fit gap-6">
-          {samples.map((s) => (
-            <article
-              key={s.slug}
-              className="card mockup"
-              style={
-                s.brandStart && s.brandEnd
-                  ? ({ ["--brand-start" as any]: s.brandStart, ["--brand-end" as any]: s.brandEnd } as React.CSSProperties)
-                  : undefined
-              }
-            >
-              <div className="card-inner">
-                {/* faux preview block */}
-                <div className="relative overflow-hidden rounded-xl border border-white/10 bg-white/5 h-44">
-                  <div className="absolute inset-0 -translate-x-full animate-[shimmer_2.5s_infinite] bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-                </div>
+          {samples.map((s) => {
+            const kit = getStyleKit(s.style || "modern", s.font);
+            const isExternal = Boolean(s.externalUrl);
+            const href = s.externalUrl || `/samples/${s.slug}`;
 
-                <h2 className="mt-4 text-xl font-semibold">{s.name}</h2>
-                <p className="mt-1 text-white/70">{s.tagline}</p>
-                <div className="mt-4 flex flex-wrap gap-2 text-sm text-white/70">
-                  {s.features.map((f) => (
-                    <span key={f} className="badge">{f}</span>
-                  ))}
-                </div>
+            return (
+              <article key={s.slug} className="card">
+                <div className="card-inner">
+                  <div className={`relative overflow-hidden rounded-xl border h-44 ${kit.previewBg} ${s.style === "serif" || s.style === "pastel" ? "border-slate-200" : "border-white/10"}`}>
+                    <div className="absolute inset-0 -translate-x-full animate-[shimmer_2.5s_infinite] bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+                  </div>
 
-                <div className="mt-6 flex items-center gap-3">
-                  <Link href={`/samples/${s.slug}`} className="btn-primary">View Demo</Link>
-                  <Link href="/#contact" className="btn-secondary">Start a Project</Link>
+                  <div className="mt-4 flex items-center justify-between gap-3">
+                    <div>
+                      <h2 className="text-xl font-semibold">{s.name}</h2>
+                      <p className="mt-1 opacity-70">{s.tagline}</p>
+                    </div>
+                    <span className={kit.badge}>{s.style || "modern"}</span>
+                  </div>
+
+                  <div className="mt-4 flex flex-wrap gap-2 text-sm opacity-80">
+                    {s.features.map((f) => <span key={f} className={kit.badge}>{f}</span>)}
+                  </div>
+
+                  <div className="mt-6 flex items-center gap-3">
+                    <Link
+                      href={href}
+                      className={kit.btnPrimary}
+                      prefetch={false}
+                      target={isExternal ? "_blank" : undefined}
+                      rel={isExternal ? "noopener noreferrer" : undefined}
+                    >
+                      View Demo{isExternal ? " →" : ""}
+                    </Link>
+                    <Link href="/#contact" className={kit.btnSecondary}>Start a Project</Link>
+                  </div>
                 </div>
-              </div>
-            </article>
-          ))}
+              </article>
+            );
+          })}
         </div>
       </section>
 
